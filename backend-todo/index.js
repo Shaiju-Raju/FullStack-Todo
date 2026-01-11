@@ -1,36 +1,47 @@
 import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import pool from "./db.js";
+
 
 const app =express();
-const PORT = 3000;
+dotenv.config();
+
+const PORT = process.env.PORT;
 
 app.use(express.json())
+app.use(cors());
 
-let todos = [];
+
 
 //GET all todos
-app.get("/api/todos", (req, res) => {
-  res.json(todos);
+app.get("/api/todos", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM todos");
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({error: "Datatbase Error"});
+  } 
 });
 
 //Add todos
-app.post("/api/todos", (req, res) => {
+app.post("/api/todos", async (req, res) => {
   const {text} = req.body;
 
   if(!text || text.trim() === "") {
     return res.status(400).json({error: "Todo text require"});
   }
 
-  const newTodo = {
-    id: Date.now(),
-    text: text.trim()
-  };
-
-  todos.push(newTodo);
-  res.status(201).json(newTodo)
+  try {
+    const result = await pool.query("INSERT INTO todos (text) VALUES ($1) RETURNING *",[text]);
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({error: "Insertion Failed"});
+  }
 });
 
 //Update todos
-app.put("/api/todos/:id", (req, res) => {
+app.put("/api/todos/:id", async (req, res) => {
   const id = Number(req.params.id);
   const {text} = req.body;
 
@@ -38,29 +49,34 @@ app.put("/api/todos/:id", (req, res) => {
     return res.status(400).json({error: "Updated text require"});
   }
 
-  const todo = todos.find(t => t.id === id);
+  try {
+    const result = await pool.query("UPDATE todos SET text=$1 WHERE id=$2 RETURNING *",[text,id]);
 
-  if(!todo) {
-    return res.status(400).json({error: "Todo not found"});
-  };
+    if (result.rows.length === 0) {
+    return res.status(404).json({ error: "Todo not found" });
+    }
 
-  todo.text = text.trim();
-  res.json(todo);
+    res.status(201).json(result.rows[0]);
+
+  } catch (err) {
+    res.status(500).json({error: "Updation Failed"});
+  }
+
 });
 
 //Delete todos
-app.delete("/api/todos/:id", (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
   const id = Number(req.params.id);
 
-  const initialLength = todos.length;
+  try {
+    const result = await pool.query("DELETE FROM todos WHERE id = $1",[id])
+    res.status(204).end();
 
-  todos = todos.filter(t => t.id !== id);
-
-  if(initialLength === todos.length) {
-    return res.status(404).json({error: "Todo not found"});
+  } catch (err) {
+    res.status(500).json({error: "Deletion Failed"});
   }
 
-  res.json({message: "todo Delete successfully"});
+ 
 });
 
 
