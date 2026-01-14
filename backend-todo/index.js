@@ -3,9 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import pool from "./db.js";
 
-
-const app =express();
 dotenv.config();
+const app =express();
+
 
 const PORT = process.env.PORT;
 
@@ -56,7 +56,7 @@ app.put("/api/todos/:id", async (req, res) => {
     return res.status(404).json({ error: "Todo not found" });
     }
 
-    res.status(201).json(result.rows[0]);
+    res.status(200).json(result.rows[0]);
 
   } catch (err) {
     res.status(500).json({error: "Updation Failed"});
