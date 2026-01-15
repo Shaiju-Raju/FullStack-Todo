@@ -94,9 +94,18 @@ export default function TodoList() {
     ));
   }
 
+  //Logout
+  function handleLogout() {
+  localStorage.removeItem("token");
+  navigate("/");
+}
+
+
   return (
     <>
       <div className="container">
+        <button onClick={handleLogout} className="logout-btn">Logout</button>
+
         <h2 className="todo-title">To Do List</h2>
         <CreateArea onAdd={addItem} />
 

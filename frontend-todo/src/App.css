@@ -90,6 +90,21 @@ body{
     
 }
 
+.logout-btn {
+  background: black;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  float: right;
+}
+
+.logout-btn:hover {
+  opacity: 0.8;
+}
+
+
 /* container for action icons placed at end of the list item */
 .item-actions{
     margin-left: auto;
