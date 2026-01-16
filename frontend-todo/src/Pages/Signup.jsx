@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export default function Login() {
+export default function Signup() {
   const navigate = useNavigate();
 
   const [value, setValue] = useState({
@@ -27,7 +27,7 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -38,13 +38,13 @@ export default function Login() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error || "Signup failed");
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      alert("Login successful");
-      navigate("/todos");
+      
+      alert("Signup successful");
+      navigate("/");
     } catch (err) {
       setError("Something went wrong");
     }
@@ -57,7 +57,7 @@ export default function Login() {
   return (
     <div className="main">
       <div className="auth-container">
-        <h2 className="auth-title">Login</h2>
+        <h2 className="auth-title">Signup</h2>
 
         <form onSubmit={handleSubmission} className="auth-form">
           <input
@@ -78,12 +78,12 @@ export default function Login() {
             required
           />
 
-          <button type="submit">Login</button>
+          <button type="submit">Signup</button>
         </form>
 
         <p className="auth-footer">
-          Don’t have an account?
-          <a href="/Signup"> Sign up</a>
+          You already have an account?
+          <a href="/"> Login</a>
         </p>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
