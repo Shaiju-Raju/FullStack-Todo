@@ -12,6 +12,10 @@ if (process.env.DATABASE_URL) {
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
+
+  max: 5,                // max connections
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
   });
 } else {
   // ✅ Local Development
