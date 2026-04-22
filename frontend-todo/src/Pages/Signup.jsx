@@ -50,9 +50,7 @@ export default function Signup() {
     }
   }
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+
 
   return (
     <div className="main">
