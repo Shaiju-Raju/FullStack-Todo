@@ -1,5 +1,6 @@
 import pkg from "pg";
 import dotenv from "dotenv";
+import dns from "dns";
 
 dotenv.config(); // 🔥 THIS LINE WAS MISSING
 
@@ -19,6 +20,7 @@ let pool;
 //   });
 // } else {
 //   // ✅ Local Development
+dns.setDefaultResultOrder("ipv4first");
   pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
