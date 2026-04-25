@@ -29,6 +29,10 @@ dns.setDefaultResultOrder("ipv4first");
     port: process.env.DB_PORT,
      ssl: { rejectUnauthorized: false },
   });
+
+  pool.on("connect", (client) => {
+  client.query("SET search_path TO todo");
+});
 // }
 
 export default pool;
