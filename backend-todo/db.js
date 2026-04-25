@@ -7,18 +7,18 @@ const { Pool } = pkg;
 
 let pool;
 
-if (process.env.DATABASE_URL) {
-  // ✅ Production (Render)
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+// if (process.env.DATABASE_URL) {
+//   // ✅ Production (Render)
+//   pool = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: { rejectUnauthorized: false },
 
-  max: 5,                // max connections
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-  });
-} else {
-  // ✅ Local Development
+//   max: 5,                // max connections
+//   idleTimeoutMillis: 30000,
+//   connectionTimeoutMillis: 2000,
+//   });
+// } else {
+//   // ✅ Local Development
   pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -27,6 +27,6 @@ if (process.env.DATABASE_URL) {
     port: process.env.DB_PORT,
      ssl: { rejectUnauthorized: false },
   });
-}
+// }
 
 export default pool;
